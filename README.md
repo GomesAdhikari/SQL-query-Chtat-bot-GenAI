@@ -1,0 +1,1 @@
+# SQl query chat bot GENAI
