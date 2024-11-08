@@ -1,0 +1,9 @@
+mysql-connector-python
+google-generativeai
+python-dotenv
+flask
+python-dotenv
+pandas
+packaging
+flask-sqlalchemy
+#-e .

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Database</title>
+    <style>
+        /* Background and Layout */
+        body {
+            font-family: Arial, sans-serif;
+            background: url('/static/image.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #ffffff;
+        }
+
+        .chat-container {
+            max-width: 500px;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* semi-transparent background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+        }
+
+        /* Message Area Styling */
+        .messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            padding-right: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: #555 #333;
+            color: #ffffff;
+        }
+        
+        .messages p {
+            background-color: #333;
+            border-radius: 15px;
+            padding: 10px;
+            margin: 5px 0;
+            max-width: 80%;
+            line-height: 1.4;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .messages p.user {
+            background-color: #4CAF50;
+            align-self: flex-end;
+        }
+        
+        .messages p.bot {
+            background-color: #555;
+            align-self: flex-start;
+        }
+
+        /* Input Styling */
+        .input-container {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .input-container input {
+            flex-grow: 1;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 20px 0 0 20px;
+            outline: none;
+        }
+
+        .input-container button {
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            color: white;
+            background-color: #4CAF50;
+            cursor: pointer;
+            border-radius: 0 20px 20px 0;
+            transition: background-color 0.2s;
+        }
+
+        .input-container button:hover {
+            background-color: #45a049;
+        }
+
+        /* Scrollbar for Chrome, Edge, and Safari */
+        .messages::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .messages::-webkit-scrollbar-thumb {
+            background-color: #555;
+            border-radius: 5px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="messages" id="messages"></div>
+        <div class="input-container">
+            <input type="text" id="message" placeholder="Ask me a question..." />
+            <button id="send">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Add greeting message when page loads
+        window.onload = function() {
+            var messagesDiv = document.getElementById('messages');
+            var botMessage = document.createElement('p');
+            botMessage.classList.add('bot');
+            botMessage.textContent = "Bot: Hello! How can I assist you today?";
+            messagesDiv.appendChild(botMessage);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        };
+
+        // Send user message and get bot response
+        document.getElementById('send').onclick = function() {
+            var message = document.getElementById('message').value;
+            if (message.trim() === "") return;
+            
+            // Display user message in chat
+            var messagesDiv = document.getElementById('messages');
+            var userMessage = document.createElement('p');
+            userMessage.classList.add('user');
+            userMessage.textContent = `You: ${message}`;
+            messagesDiv.appendChild(userMessage);
+            document.getElementById('message').value = "";
+            
+            // Scroll to the latest message
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            // Send the message to the server
+            fetch('/chat', {
+                method: 'POST',
+                body: new URLSearchParams({
+                    'message': message
+                }),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the response from the bot
+                var botMessage = document.createElement('p');
+                botMessage.classList.add('bot');
+                botMessage.textContent = `Bot: ${data.response}`;
+                messagesDiv.appendChild(botMessage);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            });
+        };
+    </script>
+</body>
+</html>
