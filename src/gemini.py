@@ -19,7 +19,7 @@ def get_query(tablename,colunms,query):
 
 def message_user(response,query):
     
-    prompt = f"this is my sql response{response} give me a message as if your are sql you are speaking to me and message must be precise and small no extra text because i am sending this response directly somewhere and be polite  this was my question{query} and if my query is out of any sql question do not answer just say i cant answer to this question"
+    prompt = f"this is my sql response{response} give me a message as if your are sql you are speaking to me and message must be precise and small no extra text because i am  sending this response directly somewhere response should not include sure this is your nswers etc only the answer text this was my question{query} and if my query is out of any sql question do not answer just say i cant answer to this question"
     response = model.generate_content(prompt)
     text_response = str(response.text)
 

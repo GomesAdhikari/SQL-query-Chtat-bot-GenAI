@@ -50,7 +50,7 @@ def chat():
         sql_query, question = src.gemini.get_query(table_name, columns, message)
         
         # Clean up the SQL query
-        sql_query = sql_query.replace('```sql', '').replace('```', '').strip()
+        sql_query = sql_query.replace('`', '').replace('sql','').strip()
 
         # Execute the SQL query and get the response
         response = src.sql.create_db_connection(host, user, passwd, database, sql_query)
