@@ -5,103 +5,254 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Database Setup</title>
     <style>
-        /* Background and Layout */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background: url('/static/image.png') no-repeat center center fixed;
-            background-size: cover;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #020924 0%, #0a1a3f 100%);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            color: #ffffff;
+            color: #e1e5ea;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Particle Animation Background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(2px 2px at 20px 30px, #4FB5FF, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #38B6FF, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #4FB5FF, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 90px 40px, #38B6FF, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 130px 80px, #4FB5FF, rgba(0,0,0,0));
+            background-size: 200px 200px;
+            animation: moveParticles 8s linear infinite;
+            opacity: 0.3;
+        }
+
+        /* Flowing Lines Animation */
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent 0,
+                transparent 48px,
+                rgba(65, 184, 255, 0.1) 48px,
+                rgba(65, 184, 255, 0.1) 49px
+            );
+            animation: flowLines 15s linear infinite;
+        }
+
+        @keyframes moveParticles {
+            from {
+                transform: translateY(-200px);
+            }
+            to {
+                transform: translateY(200px);
+            }
+        }
+
+        @keyframes flowLines {
+            from {
+                background-position: 0 0;
+            }
+            to {
+                background-position: 200px 0;
+            }
         }
 
         .setup-container {
-            width: 100%;
+            width: 90%;
             max-width: 600px;
-            background-color: rgba(0, 0, 0, 0.8); /* semi-transparent background */
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            display: flex;
-            flex-direction: column;
-            animation: fadeIn 0.5s ease-in;
+            background: rgba(2, 9, 36, 0.85);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(65, 184, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(65, 184, 255, 0.1);
+            position: relative;
+            z-index: 1;
+            animation: containerPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes containerPulse {
+            0% {
+                box-shadow: 0 8px 32px rgba(65, 184, 255, 0.2);
+            }
+            50% {
+                box-shadow: 0 8px 32px rgba(65, 184, 255, 0.4);
+            }
+            100% {
+                box-shadow: 0 8px 32px rgba(65, 184, 255, 0.2);
+            }
         }
 
         h1 {
             text-align: center;
-            color: #4CAF50;
-            margin-bottom: 20px;
+            color: #41B8FF;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            position: relative;
+            text-shadow: 0 0 10px rgba(65, 184, 255, 0.5);
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.2rem;
         }
 
         label {
-            font-size: 18px;
-            margin-bottom: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            display: block;
+            color: #41B8FF;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            text-shadow: 0 0 5px rgba(65, 184, 255, 0.3);
         }
 
         input {
-            padding: 10px;
-            font-size: 16px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            border: none;
-            background-color: #333;
-            color: white;
             width: 100%;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            background: rgba(2, 9, 36, 0.6);
+            border: 1px solid rgba(65, 184, 255, 0.2);
+            border-radius: 12px;
+            color: #ffffff;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #41B8FF;
+            box-shadow: 0 0 15px rgba(65, 184, 255, 0.3);
+            background: rgba(2, 9, 36, 0.8);
+        }
+
+        input::placeholder {
+            color: rgba(65, 184, 255, 0.5);
         }
 
         button {
-            padding: 12px;
-            font-size: 16px;
+            width: 100%;
+            margin-top: 1.5rem;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
             border: none;
             color: white;
-            background-color: #4CAF50;
+            background: linear-gradient(135deg, #41B8FF 0%, #0085FF 100%);
             cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.2s;
+            border-radius: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            transform: rotate(45deg);
+            animation: buttonShine 3s linear infinite;
+        }
+
+        @keyframes buttonShine {
+            from {
+                transform: translateX(-100%) rotate(45deg);
+            }
+            to {
+                transform: translateX(100%) rotate(45deg);
+            }
         }
 
         button:hover {
-            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(65, 184, 255, 0.4);
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        button:active {
+            transform: translateY(0);
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .setup-container {
-                width: 90%;
-                padding: 20px;
+                width: 95%;
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            input {
+                padding: 0.8rem 1.2rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="setup-container">
-        <h1>Enter Database Connection Details</h1>
+        <h1>Database Connection Setup</h1>
         <form method="POST">
-            <label for="host">Host:</label>
-            <input type="text" id="host" name="host" required><br>
+            <div class="input-group">
+                <label for="host">Host</label>
+                <input type="text" id="host" name="host" placeholder="Enter host address" required>
+            </div>
 
-            <label for="user">Username:</label>
-            <input type="text" id="user" name="user" required><br>
+            <div class="input-group">
+                <label for="user">Username</label>
+                <input type="text" id="user" name="user" placeholder="Enter username" required>
+            </div>
 
-            <label for="passwd">Password:</label>
-            <input type="password" id="passwd" name="passwd" required><br>
+            <div class="input-group">
+                <label for="passwd">Password</label>
+                <input type="password" id="passwd" name="passwd" placeholder="Enter password" required>
+            </div>
 
-            <label for="database">Database Name:</label>
-            <input type="text" id="database" name="database" required><br>
+            <div class="input-group">
+                <label for="database">Database Name</label>
+                <input type="text" id="database" name="database" placeholder="Enter database name" required>
+            </div>
 
-            <label for="table_name">Table Name:</label>
-            <input type="text" id="table_name" name="table_name" required><br>
+            <div class="input-group">
+                <label for="table_name">Table Name</label>
+                <input type="text" id="table_name" name="table_name" placeholder="Enter table name" required>
+            </div>
 
-            <button type="submit">Submit</button>
+            <button type="submit">Connect Database</button>
         </form>
     </div>
 </body>

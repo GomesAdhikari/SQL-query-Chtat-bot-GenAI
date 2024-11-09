@@ -3,149 +3,303 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat with Database</title>
+    <title>Futuristic Chat Interface</title>
     <style>
-        /* Background and Layout */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes floatingParticle {
+            0% { transform: translateY(0px) translateX(0px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-100px) translateX(50px); opacity: 0; }
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background: url('/static/image.png') no-repeat center center fixed;
-            background-size: cover;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to bottom right, #040b2b, #0a1940, #0f2155);
+            min-height: 100vh;
+            margin: 0;
+            color: #e1e5ea;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            color: #ffffff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(0, 255, 255, 0.03) 10px,
+                rgba(0, 255, 255, 0.03) 20px
+            );
+            animation: gradientFlow 15s linear infinite;
+        }
+
+        /* Particle Effects */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(0, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: floatingParticle 3s infinite;
         }
 
         .chat-container {
-            max-width: 500px;
-            width: 100%;
-            background-color: rgba(0, 0, 0, 0.8); /* semi-transparent background */
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 90%;
+            background: rgba(13, 25, 48, 0.8);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+                        0 0 0 1px rgba(0, 255, 255, 0.1),
+                        inset 0 0 32px rgba(0, 255, 255, 0.05);
             display: flex;
             flex-direction: column;
-            height: 80vh;
+            height: 85vh;
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 1;
         }
 
-        /* Message Area Styling */
+        .chat-container::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: linear-gradient(45deg, rgba(0, 255, 255, 0.1), transparent);
+            border-radius: 20px;
+            z-index: -1;
+            animation: gradientFlow 3s linear infinite;
+        }
+
         .messages {
             flex-grow: 1;
             overflow-y: auto;
-            margin-bottom: 10px;
-            padding-right: 10px;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
             scrollbar-width: thin;
-            scrollbar-color: #555 #333;
-            color: #ffffff;
-        }
-        
-        .messages p {
-            background-color: #333;
-            border-radius: 15px;
-            padding: 10px;
-            margin: 5px 0;
-            max-width: 80%;
-            line-height: 1.4;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .messages p.user {
-            background-color: #4CAF50;
-            align-self: flex-end;
-        }
-        
-        .messages p.bot {
-            background-color: #555;
-            align-self: flex-start;
+            scrollbar-color: #4a5568 #2d3748;
         }
 
-        /* Input Styling */
+        .messages p {
+            padding: 1rem 1.5rem;
+            margin: 0.75rem 0;
+            max-width: 85%;
+            line-height: 1.5;
+            animation: messageSlide 0.3s ease-out;
+            position: relative;
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .messages p.user {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(0, 128, 255, 0.2));
+            border-radius: 18px 18px 0 18px;
+            margin-left: auto;
+            color: #ffffff;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .messages p.bot {
+            background: linear-gradient(135deg, rgba(13, 25, 48, 0.8), rgba(8, 15, 30, 0.8));
+            border-radius: 18px 18px 18px 0;
+            margin-right: auto;
+            color: #e2e8f0;
+            border: 1px solid rgba(0, 255, 255, 0.1);
+        }
+
         .input-container {
             display: flex;
             align-items: center;
-            margin-top: 10px;
+            background: rgba(13, 25, 48, 0.9);
+            padding: 0.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .input-container::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: linear-gradient(45deg, rgba(0, 255, 255, 0.2), transparent);
+            border-radius: 15px;
+            z-index: -1;
+            animation: gradientFlow 3s linear infinite;
         }
 
         .input-container input {
             flex-grow: 1;
-            padding: 12px;
-            font-size: 16px;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            background: transparent;
             border: none;
-            border-radius: 20px 0 0 20px;
+            color: #ffffff;
             outline: none;
         }
 
+        .input-container input::placeholder {
+            color: rgba(0, 255, 255, 0.3);
+        }
+
         .input-container button {
-            padding: 12px;
-            font-size: 16px;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
             border: none;
             color: white;
-            background-color: #4CAF50;
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.3), rgba(0, 128, 255, 0.3));
             cursor: pointer;
-            border-radius: 0 20px 20px 0;
-            transition: background-color 0.2s;
+            border-radius: 12px;
+            margin-left: 0.5rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
         }
 
         .input-container button:hover {
-            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
         }
 
-        /* Scrollbar for Chrome, Edge, and Safari */
+        .input-container button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(0, 255, 255, 0.1),
+                transparent
+            );
+            transform: rotate(45deg);
+            animation: buttonShine 3s linear infinite;
+        }
+
+        @keyframes buttonShine {
+            from { transform: translateX(-100%) rotate(45deg); }
+            to { transform: translateX(100%) rotate(45deg); }
+        }
+
         .messages::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .messages::-webkit-scrollbar-thumb {
-            background-color: #555;
-            border-radius: 5px;
+            width: 6px;
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .messages::-webkit-scrollbar-track {
+            background: rgba(13, 25, 48, 0.3);
+            border-radius: 3px;
+        }
+
+        .messages::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 255, 0.2);
+            border-radius: 3px;
         }
     </style>
 </head>
 <body>
+    <div class="particles">
+        <!-- Particles will be added by JavaScript -->
+    </div>
     <div class="chat-container">
         <div class="messages" id="messages"></div>
         <div class="input-container">
-            <input type="text" id="message" placeholder="Ask me a question..." />
+            <input type="text" id="message" placeholder="Type your message here..." />
             <button id="send">Send</button>
         </div>
     </div>
 
     <script>
-        // Add greeting message when page loads
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.querySelector('.particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = Math.random() * 100 + 'vh';
+                particle.style.animationDelay = Math.random() * 3 + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Chat functionality
         window.onload = function() {
             var messagesDiv = document.getElementById('messages');
             var botMessage = document.createElement('p');
             botMessage.classList.add('bot');
-            botMessage.textContent = "Bot: Hello! How can I assist you today?";
+            botMessage.textContent = "Hello! How can I assist you today?";
             messagesDiv.appendChild(botMessage);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         };
 
-        // Send user message and get bot response
+        document.getElementById('message').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('send').click();
+            }
+        });
+
         document.getElementById('send').onclick = function() {
             var message = document.getElementById('message').value;
             if (message.trim() === "") return;
             
-            // Display user message in chat
             var messagesDiv = document.getElementById('messages');
             var userMessage = document.createElement('p');
             userMessage.classList.add('user');
-            userMessage.textContent = `You: ${message}`;
+            userMessage.textContent = message;
             messagesDiv.appendChild(userMessage);
             document.getElementById('message').value = "";
             
-            // Scroll to the latest message
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
             
-            // Send the message to the server
             fetch('/chat', {
                 method: 'POST',
                 body: new URLSearchParams({
@@ -155,10 +309,9 @@
             })
             .then(response => response.json())
             .then(data => {
-                // Display the response from the bot
                 var botMessage = document.createElement('p');
                 botMessage.classList.add('bot');
-                botMessage.textContent = `Bot: ${data.response}`;
+                botMessage.textContent = data.response;
                 messagesDiv.appendChild(botMessage);
                 messagesDiv.scrollTop = messagesDiv.scrollHeight;
             });
