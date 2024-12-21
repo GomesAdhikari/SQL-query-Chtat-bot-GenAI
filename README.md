@@ -50,7 +50,7 @@ Contributions are welcome! If you have suggestions or want to enhance the projec
 ---
 
 ### Contact
-For questions, feedback, or support, please reach out via email at your gomesadhikari@example.com or submit an issue on the project repository.
+For questions, feedback, or support, please reach out via email at your gomesadhikari@gmail.com or submit an issue on the project repository.
 
 ---
 
